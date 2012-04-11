@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+	
+	<!-- META -->
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	
+	<!-- Force latest IE rendering engine (even in intranet) & Chrome Frame -->
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	
+	<meta name="description" content="">
+	
+	<title>HTML5 Audio</title>
+	
+	<!-- CSS: implied media="all" -->
+	<link rel="stylesheet" href="http://dropbox/Public/hosted-assets/css/normalize.css">
+	<style>
+		body {
+			margin: 50px;
+		}
+		
+		ul, li {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+		
+		.audio-list {
+			
+		}
+		.audio-item {
+			border-top: 1px solid #ddd;
+			color: #333;
+			font-size: 12px;
+			height: 36px;
+			line-height: 36px;
+			padding-left: 36px;
+			position: relative;
+		}
+		.audio-item:first-child {
+			border: none;
+		}
+		.audio-start {
+			border-radius: 50%;
+			cursor: pointer;
+			display: block;
+			height: 21px;
+			left: 5px;
+			margin-top: -10.5px;
+			outline: none;
+			position: absolute;
+			top: 50%;
+			width: 21px;
+		}
+		.audio-start i {
+			background: url(img/audio.png) no-repeat 0 0;
+			cursor: pointer;
+			display: block;
+			height: 21px;
+			left: 0;
+			position: absolute;
+			text-indent: -9999px;
+			top: 0;
+			width: 21px;
+		}
+		.audio-start:hover,
+		.audio-start:focus {
+			background: url(img/audio-playing.png) no-repeat 0 0;
+		}
+		.audio-start:hover i,
+		.audio-start:focus i {
+			background-position: -21px 0;
+		}
+		.audio-playing,
+		.audio-playing:hover,
+		.audio-playing:focus,
+		.audio-paused,
+		.audio-paused:hover,
+		.audio-paused:focus {
+			background: url(img/audio-playing.png) no-repeat 0 0;
+		}
+		.audio-playing i {
+			background-position: -42px 0;
+		}
+		.audio-playing:hover i,
+		.audio-playing:focus i {
+			background-position: -63px 0;
+		}
+		.audio-paused i {
+			background-position: 0 0;
+		}
+		.audio-paused:hover i,
+		.audio-paused:focus i {
+			background-position: -21px 0;
+		}
+	</style>
+	
+	<script src="js/libs/LAB.min.js"></script>
+</head>
+<body>
+	
+	<ul class="audio-list">
+		<li class="audio-item">
+			<a href="music/MonaLisa.mp3" data-ogg="music/MonaLisa.ogg" class="audio-start"><i>Play Sample</i></a> Mona Lisa
+			<i class="audio-controls"></i>
+		</li>
+		<li class="audio-item">
+			<a href="music/OvertheRainbow.mp3" data-ogg="music/OvertheRainbow.ogg" class="audio-start"><i>Play Sample</i></a> Over the Rainbow
+		</li>
+	</ul>
+	
+	<!--p>Play progress (seconds): <span id="progress"></span> / <span id="duration"></span></p>
+	<p class="progressbar"><span></span></p-->
+
+	<!-- Javascript -->
+	<script src="js/libs/jquery.min.js"></script>
+	<script>
+		var TL = TL || {};
+		
+		TL = {
+			
+			'vars': {
+				'audioSupport': false,
+				'audioPlayer': '',
+				'audio': '',
+				'nowPlaying': '',
+				'flashID': 'tl-audioplayer',
+				'flashObj': '',
+				'selectedClass': 'audio-selected',
+				'playingClass': 'audio-playing',
+				'pausedClass': 'audio-paused'
+			},
+			
+			'init': function() {
+				
+				TL.vars.audioSupport = TL.audioSupport();
+				//TL.vars.audioSupport = false;
+				
+				// test for HTML5 audio support and load swfobject as fallback
+				if (!TL.vars.audioSupport) {
+					$LAB.script('js/libs/swfobject.js').wait(function() {
+						
+						// check for minimum Flash support
+						if (swfobject.hasFlashPlayerVersion('8')) {
+							TL.loadFlash();
+							TL.bindLinks();
+						}
+					});
+				} else {
+					TL.bindLinks();
+				}
+			},
+			
+			'bindLinks': function() {
+				
+				$('.audio-start').click(function(e) {
+					e.preventDefault();
+					
+					var $this = $(this),
+						_v = TL.vars;
+					
+					if ($this.hasClass(_v.selectedClass)) {
+						TL.toggleAudio($this);
+					} else {
+						if (_v.nowPlaying) {
+							_v.nowPlaying.removeClass(_v.playingClass).removeClass(_v.pausedClass).removeClass(_v.selectedClass);
+						}
+						_v.nowPlaying = $this.addClass(_v.selectedClass);
+						TL.loadAudio(_v.nowPlaying);
+					}
+				});
+			},
+			
+			'loadAudio': function(link) {
+				
+				var _v = TL.vars,
+					$link = $(link).addClass(_v.playingClass),
+					srcMp3 = $link.attr('href'),
+					srcOgg = $link.data('ogg');
+				
+				if (_v.audio) {
+					_v.audio.pause();
+					$(_v.audioPlayer).remove();
+				}
+				
+				if (TL.vars.audioSupport) {
+					_v.audioPlayer = $('<div class="player"><audio><source src="' + srcMp3 + '" type="audio/mp3"><source src="' + srcOgg + '" type="audio/ogg"></audio></div>').appendTo('body');
+					_v.audio = $('.player audio').get(0);
+					
+					_v.audio.play();
+					TL.audioProgress();
+					TL.audioEnd();
+				} else {
+					TL.vars.flashObj.fl_loadAudio(srcMp3);
+				}
+			},
+			
+			'loadFlash': function() {
+				
+				$('<div id="' + TL.vars.flashID + '" />').appendTo('body');
+				swfobject.embedSWF('swf/fl_audioplayer.swf', TL.vars.flashID, '0', '0', '8.0.0');
+			},
+			
+			'toggleAudio': function(link) {
+				
+				var $link = $(link),
+					_v = TL.vars;
+				
+				if ( $link.hasClass('audio-paused') ) {
+					$link.removeClass(_v.pausedClass).addClass(_v.playingClass);
+					TL.audioPlay();
+				} else {
+					$link.removeClass(_v.playingClass).addClass(_v.pausedClass);
+					TL.audioPause();
+				}
+			},
+			
+			'audioPlay': function() {
+				if (TL.vars.audioSupport) {
+					TL.vars.audio.play();
+				} else {
+					TL.vars.flashObj.fl_playAudio();
+				}
+			},
+			
+			'audioPause': function() {
+				if (TL.vars.audioSupport) {
+					TL.vars.audio.pause();
+				} else {
+					TL.vars.flashObj.fl_stopAudio();
+				}
+			},
+			
+			'audioProgress': function() {
+				var $audio = TL.vars.audio;
+				
+				$($audio).bind('timeupdate', function() {
+					TL.displayProgress($audio.currentTime,$audio.duration);
+				});
+			},
+			
+			'displayProgress': function(current,duration) {
+				var rem = parseInt(duration - current, 10),
+					pos = (current / duration) * 100,
+					mins = Math.floor(rem/60,10),
+					secs = rem - mins*60,
+					perc = Math.floor((current / duration) * 100);
+					
+				log(perc);
+				
+				TL.vars.nowPlaying.css({
+					'background-position': perc + '%'
+				});
+			},
+			
+			'audioEnd': function() {
+				var $audio = TL.vars.audio,
+					_v = TL.vars;
+				
+				$($audio).bind('ended', function() {
+					_v.nowPlaying.removeClass(_v.playingClass).removeClass(_v.pausedClass).removeClass(_v.selectedClass);
+					log('ended');
+				});
+			},
+			
+			'audioSupport': function() {
+				var testAudio = document.createElement('audio'),
+					audioSupport = (testAudio.play) ? true : false;
+				
+				return audioSupport;
+			}
+			
+		};
+		
+		// Flash-specific functions
+		fl_ready = function() {
+			if (navigator.appName.indexOf('Microsoft') != -1) {
+				TL.vars.flashObj = window[TL.vars.flashID];
+			} else {
+				TL.vars.flashObj = document[TL.vars.flashID];
+			}
+		};
+		
+		fl_alert = function(txt) {
+			log(txt);
+		};
+		
+		// usage: log('inside coolFunc',this,arguments);
+		(function(){var b,d,c=this,a=c.console;c.log=b=function(){d.push(arguments);a&&a.log[a.firebug?"apply":"call"](a,Array.prototype.slice.call(arguments))};c.logargs=function(e){b(e,arguments.callee.caller.arguments)};b.history=d=[]})();
+		
+		$(function() { TL.init() });
+	</script>
+
+</body>
+</html>
