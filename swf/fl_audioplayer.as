@@ -81,7 +81,7 @@ function audioStop() {
 
 // display file preload progress
 function displayLoad() {
-	ExternalInterface.call('TL.displayLoad(' + sound.getBytesLoaded() + ',' + sound.getBytesTotal() + ')');
+	ExternalInterface.call('TL.Audioplayer.displayLoad(' + sound.getBytesLoaded() + ',' + sound.getBytesTotal() + ')');
 };
 
 // display play progress and duration
@@ -102,7 +102,7 @@ function displayProgress() {
 		timeTotal = (total/kbps)*1000;
 	}
 	
-	ExternalInterface.call('TL.displayProgress(' + (sound.position/1000) + ',' + (timeTotal/1000) + ')');
+	ExternalInterface.call('TL.Audioplayer.displayProgress(' + (sound.position/1000) + ',' + (timeTotal/1000) + ')');
 };
 
 // start the preload and progress loops
