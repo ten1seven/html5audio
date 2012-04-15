@@ -17,18 +17,24 @@ TL.Audioplayer = (function(window,document,undefined) {
 	// bind click event on all .audio-start links
 	function bindLinks() {
 		
-		$('.audio-start').click(function(e) {
+		$('.audio-list').click(function(e) {
 			e.preventDefault();
 			
-			var $this = $(this);
+			var $this = $(this),
+				target = e.target || e.srcElement,
+				$link = $(target).parent();
 			
-			if ($this.hasClass(selectedClass)) {
-				Self.toggleAudio($this);
+			if (target.parentNode.nodeName !== 'A') {
+				return;
+			}
+			
+			if ($link.hasClass(selectedClass)) {
+				Self.toggleAudio($link);
 			} else {
 				if (nowPlaying) {
 					nowPlaying.removeClass(playingClass).removeClass(pausedClass).removeClass(selectedClass).attr('style','');
 				}
-				nowPlaying = $this.addClass(selectedClass);
+				nowPlaying = $link.addClass(selectedClass);
 				loadAudio(nowPlaying);
 			}
 		});
