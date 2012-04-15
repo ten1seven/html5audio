@@ -26,7 +26,7 @@ TL.Audioplayer = (function(window,document,undefined) {
 				Self.toggleAudio($this);
 			} else {
 				if (nowPlaying) {
-					nowPlaying.removeClass(playingClass).removeClass(pausedClass).removeClass(selectedClass);
+					nowPlaying.removeClass(playingClass).removeClass(pausedClass).removeClass(selectedClass).attr('style','');
 				}
 				nowPlaying = $this.addClass(selectedClass);
 				loadAudio(nowPlaying);
@@ -151,7 +151,7 @@ TL.Audioplayer = (function(window,document,undefined) {
 		
 		'audioEnd': function() {
 			$(audio).bind('ended', function() {
-				nowPlaying.removeClass(playingClass).removeClass(pausedClass).removeClass(selectedClass);
+				nowPlaying.removeClass(playingClass).removeClass(pausedClass).removeClass(selectedClass).attr('style','');
 				log('ended');
 			});
 		},
