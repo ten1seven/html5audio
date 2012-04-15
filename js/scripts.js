@@ -14,7 +14,7 @@ TL.Audioplayer = (function(window,document,undefined) {
 		pausedClass = 'audio-paused';
 	
 	
-	// bind click event on all .audio-start links
+	// bind click event on parent .audio-list and use event capturing
 	function bindLinks() {
 		
 		$('.audio-list').click(function(e) {
@@ -24,6 +24,8 @@ TL.Audioplayer = (function(window,document,undefined) {
 				target = e.target || e.srcElement,
 				$link = $(target).parent();
 			
+			//log(target.nodeName);
+			
 			if (target.parentNode.nodeName !== 'A') {
 				return;
 			}
@@ -32,7 +34,7 @@ TL.Audioplayer = (function(window,document,undefined) {
 				Self.toggleAudio($link);
 			} else {
 				if (nowPlaying) {
-					nowPlaying.removeClass(playingClass).removeClass(pausedClass).removeClass(selectedClass).attr('style','');
+					Self.clearAudio();
 				}
 				nowPlaying = $link.addClass(selectedClass);
 				loadAudio(nowPlaying);
@@ -157,9 +159,13 @@ TL.Audioplayer = (function(window,document,undefined) {
 		
 		'audioEnd': function() {
 			$(audio).bind('ended', function() {
-				nowPlaying.removeClass(playingClass).removeClass(pausedClass).removeClass(selectedClass).attr('style','');
+				Self.clearAudio();
 				log('ended');
 			});
+		},
+		
+		'clearAudio': function() {
+			nowPlaying.removeClass(playingClass).removeClass(pausedClass).removeClass(selectedClass).attr('style','');
 		},
 		
 		
