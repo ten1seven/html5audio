@@ -24,14 +24,14 @@ var wasSuccessful:Boolean = ExternalInterface.addCallback(methodName, instance, 
 ExternalInterface.call('fl_alert','[MP3 Player]: Flash ready');
 ExternalInterface.call('fl_ready');
 
-// set an empty variable for the sound duration
-var soundDuration;
+// set an empty variable for the sound duration and position
+var dur:Number, pos:Number, sound:Sound = new Sound();
 
 // get sound
 function getSound(url:String) {
 	
 	// reset variable to 0 on a new sound
-	soundDuration = 0;
+	dur = 0;
 	
 	// destroy current sound object
 	sound.stop();
@@ -46,7 +46,7 @@ function getSound(url:String) {
 			ExternalInterface.call('fl_alert','[MP3 Player]: File loaded');
 			
 			// when audio finishes loading we finally know the actual duration
-			soundDuration = sound.duration;
+			dur = sound.duration;
 		} else {
 			ExternalInterface.call('fl_alert','[MP3 Player]: Could not load Sound Data from file, please try again');
 		}
@@ -55,6 +55,7 @@ function getSound(url:String) {
 	// bind to complete event
 	sound.onSoundComplete = function() {
 		ExternalInterface.call('fl_alert','[MP3 Player]: Playback complete');
+		ExternalInterface.call('TL.Audioplayer.clearAudio()');
 		loopsStop();
 	};
 	
@@ -65,8 +66,9 @@ function getSound(url:String) {
 
 // play sound
 function audioPlay() {
-	if (sound.position < sound.duration) {
-		sound.start(sound.position / 1000);
+	ExternalInterface.call('fl_alert','[MP3 Player]: Playback position ' + (pos / 1000));
+	if (pos < dur) {
+		sound.start(pos / 1000);
 	} else {
 		sound.start();
 	}
@@ -75,6 +77,8 @@ function audioPlay() {
 
 // stop sound
 function audioStop() {
+	pos = sound.position;
+	
 	sound.stop();
 	loopsStop();
 };
@@ -88,9 +92,9 @@ function displayLoad() {
 function displayProgress() {
 	var timeTotal;
 	
-	// check if soundDuration has been set
-	if (soundDuration > 0) {
-		timeTotal = soundDuration;
+	// check if dur has been set
+	if (dur > 0) {
+		timeTotal = dur;
 	
 	// otherwise estimate manually
 	} else {
@@ -102,7 +106,7 @@ function displayProgress() {
 		timeTotal = (total/kbps)*1000;
 	}
 	
-	ExternalInterface.call('TL.Audioplayer.displayProgress(' + (sound.position/1000) + ',' + (timeTotal/1000) + ')');
+	ExternalInterface.call('TL.Audioplayer.displayProgress(' + (pos/1000) + ',' + (timeTotal/1000) + ')');
 };
 
 // start the preload and progress loops

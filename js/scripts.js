@@ -24,15 +24,19 @@ TL.Audioplayer = (function(window,document,undefined) {
 				target = e.target || e.srcElement,
 				$link = $(target).parent();
 			
-			//log(target.nodeName);
-			
+			// if the link isn't clicked directly, determine the parent row and find the correct link
 			if (target.parentNode.nodeName !== 'A') {
-				return;
+				$link = $(target).closest('tr').find('a');
 			}
 			
+			// if track is already playing/paused toggle it
 			if ($link.hasClass(selectedClass)) {
 				Self.toggleAudio($link);
+			
+			// otherwise load a new track
 			} else {
+				
+				// if there is another track playing, unload it
 				if (nowPlaying) {
 					Self.clearAudio();
 				}
@@ -50,11 +54,13 @@ TL.Audioplayer = (function(window,document,undefined) {
 			srcMp3 = $link.attr('href'),
 			srcOgg = $link.data('ogg');
 		
+		// if audio element exists
 		if (audio) {
 			audio.pause();
 			$(audioPlayer).remove();
 		}
 		
+		// if the browser supports the HTML5 <audio> element
 		if (audioSupport) {
 			audioPlayer = $('<div class="player"><audio><source src="' + srcMp3 + '" type="audio/mp3"><source src="' + srcOgg + '" type="audio/ogg"></audio></div>').appendTo('body');
 			audio = $('.player audio').get(0);
@@ -62,11 +68,14 @@ TL.Audioplayer = (function(window,document,undefined) {
 			audio.play();
 			Self.audioProgress();
 			Self.audioEnd();
+		
+		// otherwise load the Flash fallback
 		} else {
 			TL.Audioplayer.vars.flashObj.fl_loadAudio(srcMp3);
 		}
 	};
 	
+	// function to load the Flash fallback via swfobject
 	function loadFlash() {
 		
 		$('<div id="' + Self.vars.flashID + '" />').appendTo('body');
@@ -87,7 +96,8 @@ TL.Audioplayer = (function(window,document,undefined) {
 		// init
 		'init': function() {
 			
-			audioSupport = Self.audioSupport();
+			//audioSupport = Self.audioSupport();
+			audioSupport = false;
 			
 			// test for HTML5 audio support and load swfobject as fallback
 			if (!audioSupport) {
@@ -119,6 +129,7 @@ TL.Audioplayer = (function(window,document,undefined) {
 			}
 		},
 		
+		// play audio
 		'audioPlay': function() {
 			if (audioSupport) {
 				audio.play();
@@ -127,6 +138,7 @@ TL.Audioplayer = (function(window,document,undefined) {
 			}
 		},
 		
+		// pause audio
 		'audioPause': function() {
 			if (audioSupport) {
 				audio.pause();
@@ -143,6 +155,7 @@ TL.Audioplayer = (function(window,document,undefined) {
 			});
 		},
 		
+		// display progress based on events fired from the <audio> or Flash object
 		'displayProgress': function(current,duration) {
 			var rem = parseInt(duration - current, 10),
 				pos = (current / duration) * 100,
@@ -150,13 +163,15 @@ TL.Audioplayer = (function(window,document,undefined) {
 				secs = rem - mins*60,
 				perc = Math.floor((current / duration) * 100);
 				
-			log(perc);
+			log(perc + '%');
 			
+			// update the progress bar or do anything else with the progress and duration numbers
 			nowPlaying.css({
 				'background-position': perc + '%'
 			});
 		},
 		
+		// event fired at the end of the audio track
 		'audioEnd': function() {
 			$(audio).bind('ended', function() {
 				Self.clearAudio();
@@ -164,6 +179,7 @@ TL.Audioplayer = (function(window,document,undefined) {
 			});
 		},
 		
+		// when an audio track is finished or when another track is started, clear the classes and styles of the current track
 		'clearAudio': function() {
 			nowPlaying.removeClass(playingClass).removeClass(pausedClass).removeClass(selectedClass).attr('style','');
 		},

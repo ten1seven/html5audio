@@ -1,4 +1,4 @@
-.audio-list,
+/*.audio-list,
 .audio-item {
 	list-style: none;
 	margin: 0;
@@ -16,6 +16,9 @@
 }
 .audio-item:first-child {
 	border: none;
+}*/
+.audio-list td {
+	cursor: pointer;
 }
 .audio-start {
 	border-radius: 50%;
@@ -25,7 +28,7 @@
 	left: 5px;
 	margin-top: -12.5px;
 	outline: none;
-	position: absolute;
+	position: relative;
 	top: 50%;
 	width: 25px;
 }
