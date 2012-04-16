@@ -96,8 +96,7 @@ TL.Audioplayer = (function(window,document,undefined) {
 		// init
 		'init': function() {
 			
-			//audioSupport = Self.audioSupport();
-			audioSupport = false;
+			audioSupport = Self.audioSupport();
 			
 			// test for HTML5 audio support and load swfobject as fallback
 			if (!audioSupport) {
