@@ -1,6 +1,6 @@
-var TL = TL || {};
+var html5audio = html5audio || {};
 
-TL.Audioplayer = (function(window,document,undefined) {
+html5audio = (function(window,document,undefined) {
 	
 	'use strict';
 	
@@ -65,15 +65,13 @@ TL.Audioplayer = (function(window,document,undefined) {
 			audioPlayer = $('<div class="player"><audio><source src="' + srcMp3 + '" type="audio/mp3"><source src="' + srcOgg + '" type="audio/ogg"></audio></div>').appendTo('body');
 			audio = $('.player audio').get(0);
 			
-			console.log('[MP3 Player]: audio ready');
-			
 			audio.play();
 			Self.audioProgress();
 			Self.audioEnd();
 		
 		// otherwise load the Flash fallback
 		} else {
-			TL.Audioplayer.vars.flashObj.fl_loadAudio(srcMp3);
+			html5audio.vars.flashObj.fl_loadAudio(srcMp3);
 		}
 	};
 	
@@ -98,10 +96,9 @@ TL.Audioplayer = (function(window,document,undefined) {
 		// init
 		'init': function() {
 			
+			// set global variable for HTML5 audio support
 			audioSupport = Self.audioSupport();
-			//audioSupport = false;
-			
-			console.log('[MP3 Player]: init');
+			audioSupport = false;
 			
 			// test for HTML5 audio support and load swfobject as fallback
 			if (!audioSupport) {
@@ -206,9 +203,9 @@ TL.Audioplayer = (function(window,document,undefined) {
 // Flash-specific functions
 fl_ready = function() {
 	if (navigator.appName.indexOf('Microsoft') != -1) {
-		TL.Audioplayer.vars.flashObj = window[TL.Audioplayer.vars.flashID];
+		html5audio.vars.flashObj = window[html5audio.vars.flashID];
 	} else {
-		TL.Audioplayer.vars.flashObj = document[TL.Audioplayer.vars.flashID];
+		html5audio.vars.flashObj = document[html5audio.vars.flashID];
 	}
 };
 

@@ -55,7 +55,7 @@ function getSound(url:String) {
 	// bind to complete event
 	sound.onSoundComplete = function() {
 		ExternalInterface.call('fl_alert','[MP3 Player]: Playback complete');
-		ExternalInterface.call('TL.Audioplayer.clearAudio()');
+		ExternalInterface.call('html5audio.clearAudio()');
 		loopsStop();
 	};
 	
@@ -85,7 +85,7 @@ function audioStop() {
 
 // display file preload progress
 function displayLoad() {
-	ExternalInterface.call('TL.Audioplayer.displayLoad(' + sound.getBytesLoaded() + ',' + sound.getBytesTotal() + ')');
+	ExternalInterface.call('html5audio.displayLoad(' + sound.getBytesLoaded() + ',' + sound.getBytesTotal() + ')');
 };
 
 // display play progress and duration
@@ -108,7 +108,7 @@ function displayProgress() {
 		timeTotal = (total/kbps)*1000;
 	}
 	
-	ExternalInterface.call('TL.Audioplayer.displayProgress(' + (pos/1000) + ',' + (timeTotal/1000) + ')');
+	ExternalInterface.call('html5audio.displayProgress(' + (pos/1000) + ',' + (timeTotal/1000) + ')');
 };
 
 // start the preload and progress loops
