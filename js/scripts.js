@@ -96,7 +96,8 @@ TL.Audioplayer = (function(window,document,undefined) {
 		// init
 		'init': function() {
 			
-			audioSupport = Self.audioSupport();
+			//audioSupport = Self.audioSupport();
+			audioSupport = false;
 			
 			// test for HTML5 audio support and load swfobject as fallback
 			if (!audioSupport) {
@@ -161,7 +162,7 @@ TL.Audioplayer = (function(window,document,undefined) {
 				mins = Math.floor(rem/60,10),
 				secs = rem - mins*60,
 				perc = Math.floor((current / duration) * 100);
-				
+			
 			log(perc + '%');
 			
 			// update the progress bar or do anything else with the progress and duration numbers

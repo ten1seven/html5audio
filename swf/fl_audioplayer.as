@@ -92,6 +92,8 @@ function displayLoad() {
 function displayProgress() {
 	var timeTotal;
 	
+	pos = sound.position;
+	
 	// check if dur has been set
 	if (dur > 0) {
 		timeTotal = dur;
