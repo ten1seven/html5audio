@@ -65,6 +65,8 @@ TL.Audioplayer = (function(window,document,undefined) {
 			audioPlayer = $('<div class="player"><audio><source src="' + srcMp3 + '" type="audio/mp3"><source src="' + srcOgg + '" type="audio/ogg"></audio></div>').appendTo('body');
 			audio = $('.player audio').get(0);
 			
+			console.log('[MP3 Player]: audio ready');
+			
 			audio.play();
 			Self.audioProgress();
 			Self.audioEnd();
@@ -96,8 +98,10 @@ TL.Audioplayer = (function(window,document,undefined) {
 		// init
 		'init': function() {
 			
-			//audioSupport = Self.audioSupport();
-			audioSupport = false;
+			audioSupport = Self.audioSupport();
+			//audioSupport = false;
+			
+			console.log('[MP3 Player]: init');
 			
 			// test for HTML5 audio support and load swfobject as fallback
 			if (!audioSupport) {
@@ -163,7 +167,7 @@ TL.Audioplayer = (function(window,document,undefined) {
 				secs = rem - mins*60,
 				perc = Math.floor((current / duration) * 100);
 			
-			log(perc + '%');
+			console.log(perc + '%');
 			
 			// update the progress bar or do anything else with the progress and duration numbers
 			nowPlaying.css({
@@ -175,7 +179,7 @@ TL.Audioplayer = (function(window,document,undefined) {
 		'audioEnd': function() {
 			$(audio).bind('ended', function() {
 				Self.clearAudio();
-				log('ended');
+				console.log('ended');
 			});
 		},
 		
@@ -209,9 +213,9 @@ fl_ready = function() {
 };
 
 fl_alert = function(txt) {
-	log(txt);
+	console.log(txt);
 };
 
 
-// usage: log('inside coolFunc',this,arguments);
-(function(){var b,d,c=this,a=c.console;c.log=b=function(){d.push(arguments);a&&a.log[a.firebug?"apply":"call"](a,Array.prototype.slice.call(arguments))};c.logargs=function(e){b(e,arguments.callee.caller.arguments)};b.history=d=[]})();
+/* utility functions */
+window.console||(console={log:function(){}});

@@ -12,3 +12,9 @@ An HTML5 audio player with a very small footprint (2.3kb for the JavaScript mini
 ## Demo
 
 http://ten1seven.github.com/html5audio
+
+## Results (compared to jPlayer)
+
+* Uses ExternalInterface to send/receive data from Flash SWF
+* JavaScript: 2.38KB minified (jPlayer: 41.85KB)
+* SWF: 1.37KB (jPlayer: 8.25KB)
