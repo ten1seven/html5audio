@@ -17,6 +17,9 @@ html5audio = (function(window,document,undefined) {
 	// bind click event on parent .audio-list and use event capturing
 	function bindLinks() {
 		
+		// add html5audio ready class to body
+		$('body').addClass('html5audio');
+		
 		$('.audio-list').click(function(e) {
 			e.preventDefault();
 			
@@ -98,7 +101,6 @@ html5audio = (function(window,document,undefined) {
 			
 			// set global variable for HTML5 audio support
 			audioSupport = Self.audioSupport();
-			audioSupport = false;
 			
 			// test for HTML5 audio support and load swfobject as fallback
 			if (!audioSupport) {
