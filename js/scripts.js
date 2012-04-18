@@ -1,6 +1,6 @@
-var TL = TL || {};
+var html5audio = html5audio || {};
 
-TL.Audioplayer = (function(window,document,undefined) {
+html5audio = (function(window,document,undefined) {
 	
 	'use strict';
 	
@@ -16,6 +16,9 @@ TL.Audioplayer = (function(window,document,undefined) {
 	
 	// bind click event on parent .audio-list and use event capturing
 	function bindLinks() {
+		
+		// add html5audio ready class to body
+		$('body').addClass('html5audio');
 		
 		$('.audio-list').click(function(e) {
 			e.preventDefault();
@@ -71,7 +74,7 @@ TL.Audioplayer = (function(window,document,undefined) {
 		
 		// otherwise load the Flash fallback
 		} else {
-			TL.Audioplayer.vars.flashObj.fl_loadAudio(srcMp3);
+			html5audio.vars.flashObj.fl_loadAudio(srcMp3);
 		}
 	};
 	
@@ -96,6 +99,7 @@ TL.Audioplayer = (function(window,document,undefined) {
 		// init
 		'init': function() {
 			
+			// set global variable for HTML5 audio support
 			audioSupport = Self.audioSupport();
 			
 			// test for HTML5 audio support and load swfobject as fallback
@@ -161,8 +165,8 @@ TL.Audioplayer = (function(window,document,undefined) {
 				mins = Math.floor(rem/60,10),
 				secs = rem - mins*60,
 				perc = Math.floor((current / duration) * 100);
-				
-			log(perc + '%');
+			
+			console.log(perc + '%');
 			
 			// update the progress bar or do anything else with the progress and duration numbers
 			nowPlaying.css({
@@ -174,7 +178,7 @@ TL.Audioplayer = (function(window,document,undefined) {
 		'audioEnd': function() {
 			$(audio).bind('ended', function() {
 				Self.clearAudio();
-				log('ended');
+				console.log('ended');
 			});
 		},
 		
@@ -201,16 +205,16 @@ TL.Audioplayer = (function(window,document,undefined) {
 // Flash-specific functions
 fl_ready = function() {
 	if (navigator.appName.indexOf('Microsoft') != -1) {
-		TL.Audioplayer.vars.flashObj = window[TL.Audioplayer.vars.flashID];
+		html5audio.vars.flashObj = window[html5audio.vars.flashID];
 	} else {
-		TL.Audioplayer.vars.flashObj = document[TL.Audioplayer.vars.flashID];
+		html5audio.vars.flashObj = document[html5audio.vars.flashID];
 	}
 };
 
 fl_alert = function(txt) {
-	log(txt);
+	console.log(txt);
 };
 
 
-// usage: log('inside coolFunc',this,arguments);
-(function(){var b,d,c=this,a=c.console;c.log=b=function(){d.push(arguments);a&&a.log[a.firebug?"apply":"call"](a,Array.prototype.slice.call(arguments))};c.logargs=function(e){b(e,arguments.callee.caller.arguments)};b.history=d=[]})();
+/* utility functions */
+window.console||(console={log:function(){}});

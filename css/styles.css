@@ -1,26 +1,4 @@
-/*.audio-list,
-.audio-item {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-.audio-item {
-	border-top: 1px solid #ddd;
-	color: #333;
-	font-family: Geneva, Tahoma, Verdana, sans-serif;
-	font-size: 12px;
-	height: 36px;
-	line-height: 36px;
-	padding-left: 36px;
-	position: relative;
-}
-.audio-item:first-child {
-	border: none;
-}*/
-.audio-list td {
-	cursor: pointer;
-}
-.audio-start {
+.html5audio .audio-start {
 	border-radius: 50%;
 	cursor: pointer;
 	display: block;
@@ -32,7 +10,7 @@
 	top: 50%;
 	width: 25px;
 }
-.audio-start i {
+.html5audio .audio-start i {
 	background: url(../img/audio.png) no-repeat 0 0;
 	cursor: pointer;
 	display: block;
@@ -43,33 +21,33 @@
 	top: 0;
 	width: 25px;
 }
-.audio-start:hover,
-.audio-start:focus {
+.html5audio .audio-start:hover,
+.html5audio .audio-start:focus {
 	background: url(../img/audio-playing.png) no-repeat 0 0;
 }
-.audio-start:hover i,
-.audio-start:focus i {
+.html5audio .audio-start:hover i,
+.html5audio .audio-start:focus i {
 	background-position: -25px 0;
 }
-.audio-playing,
-.audio-playing:hover,
-.audio-playing:focus,
-.audio-paused,
-.audio-paused:hover,
-.audio-paused:focus {
+.html5audio .audio-playing,
+.html5audio .audio-playing:hover,
+.html5audio .audio-playing:focus,
+.html5audio .audio-paused,
+.html5audio .audio-paused:hover,
+.html5audio .audio-paused:focus {
 	background: url(../img/audio-playing.png) no-repeat 0 0;
 }
-.audio-playing i {
+.html5audio .audio-playing i {
 	background-position: -50px 0;
 }
-.audio-playing:hover i,
-.audio-playing:focus i {
+.html5audio .audio-playing:hover i,
+.html5audio .audio-playing:focus i {
 	background-position: -75px 0;
 }
-.audio-paused i {
+.html5audio .audio-paused i {
 	background-position: -25px 0;
 }
-.audio-paused:hover i,
-.audio-paused:focus i {
+.html5audio .audio-paused:hover i,
+.html5audio .audio-paused:focus i {
 	background-position: -25px 0;
 }
