@@ -3,19 +3,24 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Html5audio by ten1seven</title>
+    <title>HTML5 audio by ten1seven</title>
     
     <link rel="stylesheet" href="stylesheets/styles.css">
     <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="css/styles.css">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    
+    <script src="js/libs/LAB.min.js"></script>
   </head>
   <body>
     <div class="wrapper">
       <header>
-        <h1>Html5audio</h1>
+        <h1>HTML5 audio</h1>
         <p>A basic HTML5 audio player with Flash fallback</p>
         <p class="view"><a href="https://github.com/ten1seven/html5audio">View the Project on GitHub <small>ten1seven/html5audio</small></a></p>
         <ul>
@@ -25,7 +30,37 @@
         </ul>
       </header>
       <section>
-        <h3>Welcome to GitHub Pages.</h3>
+      	
+      	<h3>Demo</h3>
+      	
+      	<table class="audio-list">
+      		<tr>
+      			<td>
+      				<a href="music/MonaLisa.mp3" data-ogg="music/MonaLisa.ogg" class="audio-start"><i>Song Sample</i></a>
+      			</td>
+      			<td class="audio-title">
+      				Mona Lisa
+      			</td>
+      		</tr>
+      		<tr>
+      			<td>
+      				<a href="music/OvertheRainbow.mp3" data-ogg="music/OvertheRainbow.ogg" class="audio-start"><i>Song Sample</i></a> 
+      			</td>
+      			<td class="audio-title">
+      				Over the Rainbow
+      			</td>
+      		</tr>
+      		<tr>
+      			<td>
+      				<a href="music/TimetoRelax.mp3" data-ogg="music/TimetoRelax.ogg" class="audio-start"><i>Song Sample</i></a> 
+      			</td>
+      			<td class="audio-title">
+      				Time to Relax
+      			</td>
+      		</tr>
+      	</table>
+      	
+        <!--h3>Welcome to GitHub Pages.</h3>
 
 <p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
 
@@ -50,7 +85,7 @@ $ git checkout gh-pages
 
 <h3>Support or Contact</h3>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact support@github.com and we’ll help you sort it out.</p>
+<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact support@github.com and we’ll help you sort it out.</p-->
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/ten1seven">ten1seven</a></p>
@@ -58,6 +93,13 @@ $ git checkout gh-pages
       </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>
+    
+    <!-- Javascript -->
+    <script src="js/libs/jquery.min.js"></script>
+    <script src="js/scripts.js"></script>
+    <script>
+    	$(function() { TL.Audioplayer.init() });
+    </script>
     
   </body>
 </html>
