@@ -101,10 +101,11 @@ html5audio = (function(window,document,undefined) {
 			
 			// set global variable for HTML5 audio support
 			audioSupport = Self.audioSupport();
+			audioSupport = false;
 			
 			// test for HTML5 audio support and load swfobject as fallback
 			if (!audioSupport) {
-				$LAB.script('js/libs/swfobject.js').wait(function() {
+				$.getScript('js/libs/swfobject.js', function() {
 					
 					// check for minimum Flash support
 					if (swfobject.hasFlashPlayerVersion('8')) {
